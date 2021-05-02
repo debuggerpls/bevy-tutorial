@@ -3,9 +3,7 @@ use bevy::prelude::*;
 fn main() {
     App::build()
         .add_plugins(DefaultPlugins)
-        .add_startup_system(add_people.system())
-        .add_system(hello_world.system())
-        .add_system(greet_people.system())
+        .add_plugin(HelloPlugin)
         .run();
 }
 
@@ -25,5 +23,16 @@ fn hello_world() {
 fn greet_people(query: Query<&Name, With<Person>>) {
     for name in query.iter() {
         println!("Hello {}!", name.0);
+    }
+}
+
+pub struct HelloPlugin;
+
+impl Plugin for HelloPlugin {
+    fn build(&self, app: &mut AppBuilder) {
+        app
+            .add_startup_system(add_people.system())
+            .add_system(hello_world.system())
+            .add_system(greet_people.system());
     }
 }
